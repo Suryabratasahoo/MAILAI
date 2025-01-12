@@ -1,25 +1,27 @@
 import { db } from "~/server/db";
 
-
-export const POST=async(req:Request)=>{
-    const {data}=await req.json();
-    console.log('clerk webhook received',data);
-    const emailAddress=data.email_addresses[0].email_address;
-    const firstName=data.first_name;
-    const lastName=data.last_name;
-    const imageUrl=data.image_url;
-    const id=data.id;
+export const POST = async (req: Request) => {
     
+        const { data } = await req.json();
+        console.log('clerk webhook received', data);
 
-    await db.user.create({
-        data:{
-            emailAddress:emailAddress,
-            firstName:firstName,
-            lastName:lastName,
-            imageUrl:imageUrl
-        }
-    })
-    console.log("user created");
+        const emailAddress = data.email_addresses[0].email_address;
+        const firstName = data.first_name;
+        const lastName = data.last_name;
+        const imageUrl = data.image_url;
+        const id = data.id;
 
-    return new Response('webhook received',{status:200});
-}
+        // Create the user in the database
+        await db.user.create({
+            data: {
+                id: id, // Include the unique id field
+                emailAddress: emailAddress,
+                firstName: firstName,
+                lastName: lastName,
+                imageUrl: imageUrl,
+            },
+        });
+
+        console.log('User created successfully');
+        return new Response('Webhook received', { status: 200 });
+    } 

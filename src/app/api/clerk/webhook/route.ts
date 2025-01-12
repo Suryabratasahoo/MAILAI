@@ -13,7 +13,6 @@ export const POST=async(req:Request)=>{
 
     await db.user.create({
         data:{
-            id:id,
             emailAddress:emailAddress,
             firstName:firstName,
             lastName:lastName,
